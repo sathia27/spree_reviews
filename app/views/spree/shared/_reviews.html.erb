@@ -4,7 +4,9 @@
   <% for review in @product.reviews.approval_filter %>
     <%= render :partial => 'spree/shared/review', :locals => {:review => review} %>
   <% end %>
-  <% if !Spree::Reviews::Config[:require_login] || current_user %>
+ 	<% can_write_review = current_order.where(:status => "completed").line_items.pluck(:variant_id).include?(Spree::Variant.find_by_product_id(@product.id).id) %>
+
+  <% if (!Spree::Reviews::Config[:require_login] || current_user) and can_write_review %>
     <%= link_to t('write_your_own_review'), new_product_review_path(@product), :class => "button",
                 :rel => "nofollow,noindex" %>
   <% end %>

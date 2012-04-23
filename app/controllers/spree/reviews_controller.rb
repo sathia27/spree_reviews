@@ -9,7 +9,7 @@ class Spree::ReviewsController < Spree::BaseController
 
   def new
     @review = Spree::Review.new(:product => @product)
-    authorize! :new, @review
+    authorize! :new, @review, @product
   end
 
   # save if all ok
