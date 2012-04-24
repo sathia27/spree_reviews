@@ -12,7 +12,7 @@ class Spree::ReviewsController < Spree::BaseController
       order_ids = current_user.orders.where(:state => "completed").pluck(:id)
       can_write_review = Spree::LineItem.where(order_ids).pluck(:variant_id).include?(Spree::Variant.find_by_product_id(@product.id).id)
     end
-    redirect_to products_path if !can_write_review or !current_user
+    redirect_to products_path and return if !can_write_review or !current_user
     @review = Spree::Review.new(:product => @product)
     authorize! :new, @review
   end
@@ -23,7 +23,7 @@ class Spree::ReviewsController < Spree::BaseController
       order_ids = current_user.orders.where(:state => "completed").pluck(:id)
       can_write_review = Spree::LineItem.where(order_ids).pluck(:variant_id).include?(Spree::Variant.find_by_product_id(@product.id).id)
     end
-    redirect_to products_path if !can_write_review or !current_user
+    redirect_to products_path and return if !can_write_review or !current_user
     params[:review][:rating].sub!(/\s*stars/,'') unless params[:review][:rating].blank?
     @review = Spree::Review.new(params[:review])
     @review.product = @product
